@@ -26,9 +26,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         // Verificar si se encontraron resultados
         if ($resultado->num_rows > 0) {
-            // Usuario y contraseña válidos, redireccionar a la página de inicio de sesión exitosa o realizar otras acciones
-            header("Location: Views/Registro.html");
-            exit();
+            // Obtener el registro de la columna de rol
+            $usuario_info = $resultado->fetch_assoc();
+            $rol = $usuario_info['rol_idrol'];
+            
+            // Redirigir según el rol
+            if ($rol == 1) {
+                header("Location: Views/prueba.html");
+                exit();
+            } elseif ($rol == 2) {
+                header("Location: Views/Registro.html");
+                exit();
+            } else {
+                // Rol no reconocido
+                $mensaje_error = "Rol no reconocido";
+            }
         } else {
             // Usuario o contraseña inválidos, establecer el mensaje de error
             $mensaje_error = "Usuario o contraseña incorrectos";
@@ -86,7 +98,7 @@ $conexion->cerrarConexion();
             <!-- Botones dentro de formulario -->
             <button type="submit" class="btn mt-3">Iniciar</button>
             <br><br>
-            <button class="btn mt-3">Registrarse</button>
+            <button class="btn mt-3" formaction="Views/Registro.php">Registrarse</button>
         </form>
     </div>
 </body>
